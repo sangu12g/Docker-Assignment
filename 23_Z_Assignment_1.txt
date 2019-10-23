@@ -1,0 +1,29 @@
+Your supermarket company is working on expanding their Docker infrastructure. They have an existing service that provides a list of fruit sold in their stores. After measuring the amount of load on this service, they have asked you to scale this service up to a higher number of replicas.
+
+In addition, there is a new service that provides a list of vegetables. This new service needs to be created in the cluster. Set up the swarm cluster to complete the lab, ensure that the swarm meets the following specifications:
+
+1. Scale the service called products-fruit to 5 replicas.
+
+	#first we need to pull the image and create the service as a products-fruit
+		Step1: docker pull linuxacademycontent/fruit-service:1.0.0
+		Step2: docker service create -p 8080:80 --replicas 5 --name products-fruit linuxacademycontent/fruit-service:1.0.0
+		
+2. Create a new service called products-vegetables running the linuxacademycontent/vegetable-service:1.0.0 image.
+3. Publish products-vegetables on port 8081. The application listens on port 80.
+		
+		Step1: docker pull linuxacademycontent/vegetable-service:1.0.0
+		Step2: docker service create -p 8081:80 --replicas 1 --name products-vegetables2 linuxacademycontent/vegetable-service:1.0.0
+
+4. Run products-vegetables with 3 replicas.
+		
+		Step1: docker service scale products-vegetables2=3
+		
+You can test the products-fruit service from any swarm node (including the manager) with curl localhost:8080.
+		#we hit the below link it will show you all fruits list 
+		curl 52.13.106.36:8080
+		
+Once products-vegetables is running, you should be able to test it from any swarm node (including the manager) with curl localhost:8081.
+		#we hit the below link it will show you all fruits list
+		curl 52.13.106.36:8081
+
+Good luck!
