@@ -1,0 +1,82 @@
+Your company is ready to move forward with using Docker to run their applications. However, they have some complex container apps that can take advantage of the cluster management and orchestration features of Docker swarm. You have been asked to stand up a simple Docker swarm cluster to be used for some initial testing. A set of servers has already been provisioned for this purpose. The swarm cluster should meet the following criteria:
+
+One Swarm manager.
+Two worker nodes.
+All nodes should use Docker CE version 5:18.09.5~3-0~ubuntu-bionic.
+Both worker nodes should be joined to the cluster.
+Any non-root user should be able to run docker commands on all three servers.
+
+[NOTE: Write the series of commands to achieve above in this file below the question scenario with documentation]
+
+Good luck!
+
+
+
+One Swarm manager.
+
+step1: Create Docker Swarm cluster
+	docker swarm init
+
+step2:  check the status of the Manager Node with the following command
+	docker node ls
+
+	ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS
+	iwjtf6u951g7rpx6ugkty3ksa *   Manager-Node        Ready               Active              Leader
+	
+
+Two worker nodes.
+All nodes should use Docker CE version 5:18.09.5~3-0~ubuntu-bionic.
+
+step3: create the two Worker Nodes as Node1 and Node2 Using AWS Ubuntu EC2 instance
+ 
+step4:Download Dependencies
+	You’ll need to run these commands to allow your operating system to access the Docker repositories over HTTPS.
+	
+	sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+step5: Add Docker’s GPG Key
+	The GPG key is a security feature.
+	To ensure that the software you’re installing is authentic enter
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
+
+step6:Install the Docker Repository
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable" 
+
+step7:for the version you want to instal
+	sudo apt-get install docker-ce=<VERSION>
+	Example:
+	sudo apt-get install docker-ce=5:18.09.5~3-0~ubuntu-bionic
+
+
+
+
+Both worker nodes should be joined to the cluster.
+
+step8: Manager Node is now configured properly, it’s time to add Worker Node to the Swarm Cluster. 
+        First, copy the output of the “swarm init” command from the previous step, 
+        then paste that output on the Worker Node1 and Worker Node2 to join the Swarm Cluster
+	
+	To add a worker to this swarm, run the following command
+	 docker swarm join --token SWMTKN-1-48rns9sibsps4wau8rsoq4ew9mle0rxs9m2qk0go38jsy32ccz-cz0v7sdnsk3umnu7678h8mx8m 172.31.17.208:2377
+	
+	To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions
+
+
+	ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+	d6dpsd6td123dp4tj43q5xjpj *   ip-172-31-17-208    Ready               Active              Leader              18.09.5
+	5qqh9ml5q7p8ejzov3pvqegjw     ip-172-31-19-78     Ready               Active                                  18.09.5
+
+
+
+	
+Any non-root user should be able to run docker commands on all three servers
+
+step9:Add the ec2-user to the docker group so you can execute Docker commands without using sudo. 
+	sudo usermod -a -G docker ec2-user
+	
+step10: Change the permissions of /var/run/docker.sock for the current user.
+	sudo chmod 777 /var/run/docker.sock
+
+step11:Verify that the ec2-user can run Docker commands without sudo.
+	docker info
+
