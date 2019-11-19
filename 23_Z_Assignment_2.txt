@@ -31,23 +31,24 @@ services:
   ports:
    - 8081:80
   environment:
-   - FRUIT_HOST=http://172.17.0.72
+   - FRUIT_HOST=172.17.0.72
    - FRUIT_PORT=8081
  vegetable:
   image: linuxacademycontent/vegetable-service:1.0.0
   ports:
    - 8082:80
   environment:
-   - VEGETABLE_HOST=http://172.17.0.72
+   - VEGETABLE_HOST=172.17.0.72
    - VEGETABLE_PORT=8082
  allproduct:
   image: linuxacademycontent/all-products:1.0.0
   ports:
    - 8080:80
   environment:
-   - VEGETABLE_HOST=http://172.17.0.72
-   - VEGETABLE_PORT=8080 
-   
+   - VEGETABLE_HOST=172.17.0.72
+   - VEGETABLE_PORT=8082 
+   - FRUIT_HOST=172.17.0.72
+   - FRUIT_PORT=8081
 Deploy a Docker application stack that meets the following specifications:
 1. The stack is called produce.
 docker stack deploy -c produce.yml  produce
